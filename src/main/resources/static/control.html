@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>后台</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.21/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.21/datatables.min.js"></script>
+    <link rel="stylesheet" href="css/main_style.css">
+    <script>
+        $(document).ready(function () {
+            $('#musicTable').DataTable({
+                "ajax": {
+                    "url": "/music",
+                    "type": "GET",
+                    "dataSrc": ""
+                },
+                "columns": [
+                    {"data": "id"},
+                    {"data": "name"},
+                    {"data": "url"},
+                    {"data": "author"},
+                    {"data": "information"},
+                ],
+                language: {
+                    "sProcessing": "处理中...",
+                    "sLengthMenu": "显示 _MENU_ 项结果",
+                    "sZeroRecords": "没有匹配结果",
+                    "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                    "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                    "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                    "sInfoPostFix": "",
+                    "sSearch": "搜索:",
+                    "sUrl": "",
+                    "sEmptyTable": "表中数据为空",
+                    "sLoadingRecords": "载入中...",
+                    "sInfoThousands": ",",
+                    "oPaginate": {
+                        "sFirst": "首页",
+                        "sPrevious": "上页",
+                        "sNext": "下页",
+                        "sLast": "末页"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": 以升序排列此列",
+                        "sSortDescending": ": 以降序排列此列"
+                    }
+                }
+            });
+        });
+
+        function addMusic() {
+            var name = $("#inputName").val().toString();
+            var Url = $("#inputURL").val().toString();
+            var author = $('#inputAuthor').val().toString();
+            var info = $('#inputInformation').val().toString();
+            $.ajax({
+                url: "music",
+                type: "POST",
+                data: JSON.stringify({
+                    name: name,
+                    url: Url,
+                    author: author,
+                    information: info,
+                    thumbnail: "图URL"
+                }),
+                dataType: "json",
+                contentType: "application/json",
+                success: function (response) {
+                    alert("添加成功！")
+                    console.log(response);
+                },
+                error: function (xhr, status, error) {
+                    alert("添加失败！")
+                    console.error(error);
+                }
+            });
+        }
+
+        function addAdmin() {
+            var name = $("#inputAdminName").val().toString();
+            var email = $('#inputAdminID').val().toString();
+            var pssword = $('#inputAdminPassword').val().toString();
+            $.ajax({
+                url: "admin",
+                type: "POST",
+                data: JSON.stringify({
+                    name: name,
+                    email: email,
+                    password: pssword
+                }),
+                dataType: "json",
+                contentType: "application/json",
+                success: function (response) {
+                    alert("添加成功！")
+                    console.log(response);
+                },
+                error: function (xhr, status, error) {
+                    alert("添加失败！")
+                    console.error(error);
+                }
+            });
+        }
+
+        function uploadFile() {
+            var fileInput = document.getElementById('apk');
+            var file = fileInput.files[0];
+
+            var formData = new FormData();
+            formData.append('file', file);
+
+            $.ajax({
+                url: 'upload',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    alert("上传成功")
+                },
+                error: function() {
+                    alert("上传失败")
+                }
+            });
+        }
+        function uploadModel() {
+            const fileInput = document.getElementById('h5');
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'http://121.41.1.169:8067/uploadH5', true);
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    console.log('模型上传成功');
+                    alert('模型上传成功')
+                    // 处理上传成功后的操作
+                } else {
+                    console.error('上传模型失败:', xhr.status);
+                }
+            };
+            xhr.onerror = function () {
+                console.error('上传模型错误');
+                alert('模型上传失败')
+            };
+            xhr.send(formData);
+        }
+
+
+    </script>
+    <style>
+        .file-input-container {
+            text-align: right;
+        }
+
+        .file-input-container input[type="file"] {
+            float: right;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse"
+                            data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">悦音后台</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#"><strong>悦音后台管理系统</strong>-我们不生产BGM，我们只是BGM的搬运工</a>
+                </div>
+            </nav>
+            <br><br><br><br>
+            <div class="row clearfix">
+                <div class="col-md-9 column">
+                    <table id="musicTable" class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>音乐</th>
+                            <th>地址</th>
+                            <th>作者</th>
+                            <th>信息</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="col-md-3 column">
+                    <div class="alert alert-success alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h4>
+                            注意!
+                        </h4> 注意信息准确无误
+                    </div>
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="col-sm-6 control-label">音乐信息录入</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputName" class="col-sm-2 control-label">音乐</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="inputName" required/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputAuthor" class="col-sm-2 control-label">作者</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="inputAuthor" required/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputURL" class="col-sm-2 control-label">链接</label>
+                            <div class="col-sm-10">
+                                <input type="url" class="form-control" id="inputURL" required/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputInformation" class="col-sm-2 control-label">详细信息</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" id="inputInformation" required></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <input onclick="addMusic()" class="btn btn-default" value="确认提交">
+                            </div>
+                        </div>
+                    </form>
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="col-sm-6 control-label">管理员信息录入</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputAdminName" class="col-sm-2 control-label">用户名</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="inputAdminName" required/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputAdminID" class="col-sm-2 control-label">账号</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="inputAdminID" required/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputAdminPassword" class="col-sm-2 control-label">密码</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="inputAdminPassword" required/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <input onclick="addAdmin()" class="btn btn-default" value="确认添加">
+                            </div>
+                        </div>
+                    </form>
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="col-sm-6 control-label">应用上架</label>
+                        </div>
+                        <div class="form-group file-input-container">
+                            <label for="apk">安装包&ensp;&ensp;&ensp;</label><input type="file" id="apk" />
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <input onclick="uploadFile()" class="btn btn-default" value="确认添加安装包">
+                            </div>
+                        </div>
+                    </form>
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="col-sm-6 control-label">模型更新</label>
+                        </div>
+                        <div class="form-group file-input-container">
+                            <label for="h5">音乐模型&ensp;&ensp;&ensp;</label><input type="file" id="h5" />
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <input onclick="uploadModel()" class="btn btn-default" value="确认添加模型">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

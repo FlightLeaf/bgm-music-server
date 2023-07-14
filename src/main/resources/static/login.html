@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>系统登录</title>
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/main_style.css">
+  <link rel="stylesheet" href="css/back.css">
+  <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script>
+    function login()
+    {
+        var email =$("#inputID3").val();
+        var password = $("#inputPassword3").val().toString();
+        $.ajax({
+          url: "/admin/login",
+          type: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({
+            email: email,
+            password: password
+          }),
+          success: function(response) {
+            alert("登录成功")
+            window.location.href="control.html"
+            console.log(response);
+          },
+          error: function(xhr, status, error) {
+            alert("登录失败")
+            console.log(error);
+          }
+        });
+    }
+  </script>
+</head>
+<body>
+<div class="bjimg"></div>
+<br><br>
+<div class="container" style="width: 80%;">
+  <div class="row clearfix">
+    <div class="col-md-12 column">
+      <div class="row clearfix">
+        <div class="col-md-2 column">
+        </div>
+        <div class="col-md-8 column">
+          <img src="images/logo.png" style="display: block;margin: 0 auto">
+        </div>
+        <div class="col-md-2 column">
+        </div>
+      </div><br><br><br><br>
+      <div class="row clearfix">
+        <div class="col-md-4 column">
+        </div>
+        <div class="col-md-4 column">
+          <div class="rowx clearfix">
+            <div class="main">
+              <br><br>
+              <div class="col-md-12 column"  style="color:#ffffff;">
+                <h2 class="text-center text-info" style="color:#ffffff;font-family: '方正粗黑宋简体'">
+                  管理员登录
+                </h2><br>
+                <form class="form-horizontal" name="ThisFrom" role="form">
+                  <div class="form-group">
+                    <label for="inputID3" class="col-sm-3 control-label">账&emsp;号：</label>
+                    <div class="col-sm-9">
+                      <input type="email" required="required"  class="form-control" id="inputID3" name="email"/>
+                    </div>
+                  </div><br>
+                  <div class="form-group">
+                    <label for="inputPassword3" class="col-sm-3 control-label">密&emsp;码：</label>
+                    <div class="col-sm-9">
+                      <input type="password" required="required"  class="form-control" id="inputPassword3" name="password"/>
+                    </div>
+                  </div><br>
+                  <div class="form-group">
+                    &emsp;<input type="button" onclick="login()" class="btn btn-primary btn-block btn-lg" value="登录">&emsp;
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 column">
+        </div>
+      </div>
+      <div class="row clearfix">
+        <div class="col-md-4 column">
+        </div>
+        <div class="col-md-4 column">
+        </div>
+        <div class="col-md-4 column">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

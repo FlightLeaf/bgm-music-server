@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.player.bgm.dao.UserDao">
+
+    <resultMap type="com.player.bgm.entity.User" id="UserMap">
+        <result property="time" column="time" jdbcType="TIMESTAMP"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="img" column="img" jdbcType="VARCHAR"/>
+        <result property="love" column="love" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="UserMap">
+        select time,
+               name,
+               email,
+               password,
+               img,
+               love
+        from user
+        where email = #{email}
+    </select>
+
+    <!--查询单个-->
+    <select id="login" resultMap="UserMap">
+        select time,
+               name,
+               email,
+               password,
+               img,
+               love
+        from user
+        where email = #{email} and password = #{password}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="UserMap">
+        select
+        time, name, email, password, img, love
+        from user
+        <where>
+            <if test="time != null">
+                and time = #{time}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="email != null and email != ''">
+                and email = #{email}
+            </if>
+            <if test="password != null and password != ''">
+                and password = #{password}
+            </if>
+            <if test="img != null and img != ''">
+                and img = #{img}
+            </if>
+            <if test="love != null and love != ''">
+                and love = #{love}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from user
+        <where>
+            <if test="time != null">
+                and time = #{time}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="email != null and email != ''">
+                and email = #{email}
+            </if>
+            <if test="password != null and password != ''">
+                and password = #{password}
+            </if>
+            <if test="img != null and img != ''">
+                and img = #{img}
+            </if>
+            <if test="love != null and love != ''">
+                and love = #{love}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="email" useGeneratedKeys="true">
+        insert into user(email, name, password, img, love)
+        values (#{email}, #{name}, #{password}, #{img}, #{love})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="email" useGeneratedKeys="true">
+        insert into user(email, name, password, img, love)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.email}, #{entity.name}, #{entity.password}, #{entity.img}, #{entity.love})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="email" useGeneratedKeys="true">
+        insert into user(email, name, password, img, love)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.email}, #{entity.name}, #{entity.password}, #{entity.img}, #{entity.love})
+        </foreach>
+        on duplicate key update
+        email = values(email),
+        time = values(time),
+        name = values(name),
+        password = values(password),
+        img = values(img),
+        love = values(love)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update user
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="img != null and img != ''">
+                img = #{img},
+            </if>
+            <if test="love != null and love != ''">
+                love = #{love},
+            </if>
+        </set>
+        where email = #{email}
+    </update>
+
+    <!--更新我喜欢-->
+    <update id="updateLove">
+        UPDATE user
+        <set>
+            <if test="love != null and email != null">
+                love = JSON_ARRAY_APPEND(love, '$', #{love})
+            </if>
+        </set>
+        WHERE email = #{email}
+    </update>
+
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from user
+        where email = #{email}
+    </delete>
+
+</mapper>
+

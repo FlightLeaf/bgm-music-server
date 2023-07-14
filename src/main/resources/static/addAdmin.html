@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>添加</title>
+  <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript">
+    function add()
+    {
+      var str1 = document.getElementById("password").value;
+      var str2 = document.getElementById("surePassword").value;
+      if (str2 !== str1)
+      {
+        alert("两次密码必须一致");
+      }
+      else {
+        var email =$("#email").val();
+        var name = $("name").val();
+        var password = $("password").val();
+        var surePassword = $("surePassword").val();
+        $.ajax({
+          url: "/admin/add",
+          type: "post",
+          dataType: "json",
+          contentType: "application/json",
+          data: JSON.stringify({
+            name: name,
+            password: password,
+            email: email
+          }),
+          success: function(response) {
+            // 请求成功后的处理逻辑
+            console.log(response);
+          },
+          error: function(xhr, status, error) {
+            // 请求失败后的处理逻辑
+            console.log(error);
+          }
+        });
+
+      }
+    }
+
+  </script>
+</head>
+<body>
+<div style="text-align: center;">
+  <h2>用户登录</h2>
+  <form>
+    <label>
+      邮&emsp;箱：
+      <input type="email" id="email" name="email" required>
+    </label><br>
+    <label>
+      用户名：
+      <input type="text" id="name" name="name" required>
+    </label><br>
+    <label>
+      密&emsp;码：
+      <input type="password" id="password" name="password" required>
+    </label><br>
+    <label>
+      确认密码：
+      <input type="password" id="surePassword" name="password" required>
+    </label><br>
+    <input type="button" value="添加" onclick="add()">
+  </form>
+</div>
+</body>
+</html>

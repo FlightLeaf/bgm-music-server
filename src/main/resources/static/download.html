@@ -1,0 +1,152 @@
+<!doctype html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>悦音-Player-你的专属BGM-下载</title>
+    <link rel="icon" type="image/x-icon" href="assets/img/音箱.svg"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/jquery.fancybox.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/animate.min.css">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.4.0/css/font-awesome.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script>
+        function downloadFile(target) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', '/download/' + target, true);
+            xhr.responseType = 'blob';
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    const disposition = xhr.getResponseHeader('content-disposition');
+                    const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                    const matches = filenameRegex.exec(disposition);
+                    const filename = matches !== null && matches[1] ? matches[1].replace(/['"]/g, '') : target;
+
+                    const blob = xhr.response;
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                } else {
+                    console.error('文件下载失败:', xhr.status);
+                }
+            };
+
+            xhr.onerror = function() {
+                console.error('文件下载错误');
+            };
+
+            xhr.send();
+        }
+
+        // 调用下载文件方法
+        const targetFileName = 'apk.apk';
+
+    </script>
+</head>
+
+<body>
+<!-- header section -->
+<section class="innerbanner" role="banner">
+    <header id="header">
+        <!-- navigation section  -->
+        <div class="header-content clearfix"><a class="logo" href="home.html"><img src="images/logo.png" width="346.5"
+                                                                                   height="82"></a>
+            <nav class="navigation" role="navigation">
+                <ul class="primary-nav">
+                    <li><a href="download.html"><h4 style="color: white">下载&nbsp;&nbsp;&nbsp;&nbsp;</h4></a></li>
+                    <li><a href="about.html"><h4 style="color: white">关于&nbsp;&nbsp;&nbsp;&nbsp;</h4></a></li>
+                    <li><a href="#"><h4 style="color: white">鸣谢&nbsp;&nbsp;&nbsp;&nbsp;</h4></a></li>
+                </ul>
+            </nav>
+            <a href="#" class="nav-toggle">Menu<span></span></a></div>
+    </header>
+
+    <div class="container">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="innerbanner-text text-center">
+                <p>下载</p>
+            </div>
+        </div>
+    </div>
+</section>
+<br><br><br><br><br>
+<section id="works" class="works section no-padding">
+<br><br>
+    <div class="container-fluid">
+        <div class="row no-gutter">
+            <div class="col-lg-3 col-md-6 col-sm-6 work"><a href="http://121.41.1.169:8067/static/apk.apk" id="app" class="work-box app"> <img
+                    src="images/Android-logo.webp" alt="">
+                <div class="overlay">
+                    <div class="overlay-caption">
+                        <h5>Android下载</h5>
+                        <p>Android download</p>
+                        <button type="button" onclick="downloadFile(targetFileName)" class="btn btn-lg btn-success btn-block">music.apk</button>
+                    </div>
+                </div>
+            </a>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 work"><a href="images/windows.jpg" class="work-box exe"> <img
+                    src="images/windows.jpg" alt="">
+                <div class="overlay">
+                    <div class="overlay-caption">
+                        <i class="bi bi-android2"></i>
+                        <h5>Windows下载</h5>
+                        <p>Windows download</p>
+                      <button type="button" class="btn btn-lg disabled btn-success btn-block">music.exe</button>
+                    </div>
+                </div>
+            </a>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 work"><a href="images/linux-1200x800.jpg" class="work-box linux">
+                <img src="images/linux-1200x800.jpg" alt="">
+                <div class="overlay">
+                    <div class="overlay-caption">
+                        <h5>Linux下载</h5>
+                        <p>Linux download</p>
+                      <button type="button" class="btn btn-lg btn-block disabled btn-success">music.tar.gz</button>
+                    </div>
+                </div>
+            </a>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 work"><a href="images/R-C.jpg" class="work-box mac"> <img
+                    src="images/R-C.jpg" alt="">
+                <div class="overlay">
+                    <div class="overlay-caption">
+                        <h5>MacOS下载</h5>
+                        <p>MacOS download</p>
+                      <button type="button" class="btn disabled btn-block btn-lg btn-success">music.app</button>
+                    </div>
+                </div>
+            </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://cdn.staticfile.org/jquery/1.11.3/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/jquery.fancybox.pack.js"></script>
+<script src="js/jquery.waypoints.min.js"></script>
+<script src="js/retina.min.js"></script>
+<script src="js/modernizr.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+.logo {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 9999; /* 设置较高的z-index值 */
+}
+
+.logo img {
+    width: 80px; /* 根据需要设置logo的宽度 */
+}
